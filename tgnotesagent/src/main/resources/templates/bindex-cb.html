@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="keywords" th:content="${keywords}"/>
-    <title>List of all notes</title>
+    <title>List of all books</title>
     <style type="text/css">
         body {
             padding: 50px;
         }
 
-        .notes, .notes td {
+        .books, .books td {
             border: 1px solid lightgray;
             padding: 5px;
         }
@@ -17,9 +17,9 @@
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-<h1>Notes:</h1>
+<h1>Books:</h1>
 
-<table class="notes">
+<table class="books">
     <thead>
     <tr>
         <th>Text</th>
@@ -29,17 +29,14 @@
     </tbody>
 </table>
 
-<h1>Links:</h1>
-<br><a href="/swagger-ui/">Swagger UI</a>
-<br><a href="/swagger-ui/">Actuator</a>
-
 <script>
     $(function () {
-        $.get('/notes').done(function (notes) {
-            notes.forEach(function (note) {
+        $.get('/api/book').done(function (books) {
+            books.forEach(function (book) {
                 $('tbody').append(`
                     <tr>
-                        <td>${note.text}</td>
+                        <td>${book.id}</td>
+                        <td>${book.name}</td>
                     </tr>
                 `)
             });

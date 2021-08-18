@@ -1,4 +1,4 @@
-package ru.bvt.tgnotesagent.service;
+package ru.bvt.tgnotesagent.bot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,31 +9,22 @@ import ru.bvt.tgnotesagent.feign.NoteFeignClientBotEdition;
 import ru.bvt.tgnotesagent.model.NoteVO;
 
 @Service
-public class TgNotesBotAgentServiceSimple extends TelegramLongPollingBot implements TgNotesBotAgentService {
+public class TgNotesBot extends TelegramLongPollingBot {
 
     private NoteFeignClientBotEdition noteFeignClientBotEdition;
     private String botUsername;
     private String botToken;
 
     @Autowired
-    public TgNotesBotAgentServiceSimple(NoteFeignClientBotEdition noteFeignClientBotEdition, @Value("${bot.name}") String botUsername, @Value("${bot.token}") String botToken) {
+    public TgNotesBot(NoteFeignClientBotEdition noteFeignClientBotEdition, @Value("${bot.name}") String botUsername, @Value("${bot.token}") String botToken) {
         this.botUsername = botUsername;
         this.botToken = botToken;
         this.noteFeignClientBotEdition = noteFeignClientBotEdition;
     }
 
-    ;
-
     @Override
     public void onUpdateReceived(Update update) {
-        //      try {
-//        System.out.println(update.getMessage().getText());
-        noteFeignClientBotEdition.createOrSaveNote(new NoteVO(update.getMessage().getText()));
-//  TODO: добавить команды телеграм, сделать хэндлеры к ним
-//
-        //           } catch (TelegramApiException e) {
-        //           e.printStackTrace();
-        //       }
+        noteFeignClientBotEdition.createNoteFromBriefDTO(new NoteVO(update.getMessage().getText()));
     }
 
     // Геттеры, которые необходимы для наследования от TelegramLongPollingBot
